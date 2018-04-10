@@ -41,7 +41,7 @@ def get_headers():
     return headstr
 
 #writing header:
-csv=open('PR'+str(datetime.datetime.now())+'.csv','w')
+csv=open('PR_'+str(datetime.datetime.now())+'.csv','w')
 csv.write(get_headers())
 
 #open bugfile:
