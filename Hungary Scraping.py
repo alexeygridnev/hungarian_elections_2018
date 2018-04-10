@@ -36,7 +36,7 @@ def get_headers():
     party_names=soup.findAll('td', style="text-align:left;")
     headstr='polling_station,'
     for party in party_names:
-        headstr=headstr+party.text.replace(' ','_')+','
+        headstr=headstr+party.text.replace(' ','_').replace('-', '_')+','
     headstr=headstr+'total,turnout_gen_perc\n'
     return headstr
 
