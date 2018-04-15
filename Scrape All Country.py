@@ -4,28 +4,39 @@ import re
 import datetime
 
 def get_stations(url):
-    html=requests.get(url).text.encode('ISO-8859-1').decode('UTF-8')
-    soup=bs4.BeautifulSoup(html)
-    links_raw=soup.findAll('a')
-    links=[]
-    for link in links_raw:
-        links.append(url.rstrip('szkkiv.html')+link['href'])
-    return links
+    try:
+        html=requests.get(url).text.encode('ISO-8859-1').decode('UTF-8')
+        soup=bs4.BeautifulSoup(html)
+        links_raw=soup.findAll('a')
+        links=[]
+        for link in links_raw:
+            links.append(url.rstrip('szkkiv.html')+link['href'])
+        return links
+    except ConnectionError:
+        print('Connection error. Reconnecting in 10 seconds...')
+        time.sleep(10)
+        return get_stations(url)
+
 
 def get_data(url):
-    html=requests.get(url).text.encode('ISO-8859-1').decode('UTF-8')
-    turnout=re.findall('<br>\d+\.\d+ %</td>', html)[0]
-    turnout=turnout.lstrip('<br>').rstrip(' %</td>')
-    start_part=html.find('<th>A pártlista neve</th>')
-    end_part=html.find('A nemzetiségi listák adatai')
-    html_part=html[start_part:end_part]
-    soup=bs4.BeautifulSoup(html_part)
-    party_results=soup.findAll('td', style="text-align:right;")
-    datastr=''
-    for i in range(len(party_results)-2):
-        datastr=datastr+party_results[i].text+','
-    datastr=datastr+party_results[-1].text+','+turnout+'\n'
-    return datastr
+    try:
+        html=requests.get(url).text.encode('ISO-8859-1').decode('UTF-8')
+        turnout=re.findall('<br>\d+\.\d+ %</td>', html)[0]
+        turnout=turnout.lstrip('<br>').rstrip(' %</td>')
+        start_part=html.find('<th>A pártlista neve</th>')
+        end_part=html.find('A nemzetiségi listák adatai')
+        html_part=html[start_part:end_part]
+        soup=bs4.BeautifulSoup(html_part)
+        party_results=soup.findAll('td', style="text-align:right;")
+        datastr=''
+        for i in range(len(party_results)-2):
+            datastr=datastr+party_results[i].text+','
+        datastr=datastr+party_results[-1].text+','+turnout+'\n'
+        return datastr
+    except ConnectionError:
+        print('Connection error. Reconnecting in 10 seconds...')
+        time.sleep(10)
+        return get_data(url)
 
 def get_headers():
     html=requests.get('http://www.valasztas.hu/dyn/pv18/szavossz/hu/M04/T004/szkjkv_001.html').text.encode('ISO-8859-1').decode('UTF-8')
@@ -48,12 +59,6 @@ csv.write(get_headers())
 bugs=open('Bugs_'+str(datetime.datetime.now())+'.txt', 'w')
 
 #getting data, loop:
-
-##html_i=requests.get('http://www.valasztas.hu/dyn/pv18/szavossz/hu/TK/szkkivtk.html').text.encode('ISO-8859-1').decode('UTF-8')
-##start_i=html_i.find('<html>')
-##end_i=html_i.find('Megyei jogú városok:')
-##html_i=html_i[start_i:end_i]
-##soup_i=bs4.BeautifulSoup(html_i)
 
 letters='abcdefghijklmnoprstuvz'
 url_base='http://www.valasztas.hu/dyn/pv18/szavossz/hu/TK/szkkivtk'
