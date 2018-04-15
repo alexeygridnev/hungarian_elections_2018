@@ -12,7 +12,7 @@ def get_stations(url):
         for link in links_raw:
             links.append(url.rstrip('szkkiv.html')+link['href'])
         return links
-    except ConnectionError:
+    except (ConnectionError, TimeoutError):
         print('Connection error. Reconnecting in 10 seconds...')
         time.sleep(10)
         return get_stations(url)
@@ -33,7 +33,7 @@ def get_data(url):
             datastr=datastr+party_results[i].text+','
         datastr=datastr+party_results[-1].text+','+turnout+'\n'
         return datastr
-    except ConnectionError:
+    except (ConnectionError, TimeoutError):
         print('Connection error. Reconnecting in 10 seconds...')
         time.sleep(10)
         return get_data(url)
