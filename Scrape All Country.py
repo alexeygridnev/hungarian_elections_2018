@@ -45,15 +45,24 @@ def get_headers():
     html=html[start:end]
     soup=bs4.BeautifulSoup(html)
     party_names=soup.findAll('td', style="text-align:left;")
-    headstr='polling_station,'
+    i=1
+    headstr=''
     for party in party_names:
-        headstr=headstr+party.text.replace(' ','_').replace('-', '_')+','
-    headstr=headstr+'total,turnout_gen_perc\n'
+        headstr=headstr+'v'+str(i)+' - '+party.text+'\n'
+        i+=1
     return headstr
 
-#writing header:
+
+#writing codebook
+with open('Codebook.txt', 'w') as codebook:
+    codebook.write(get_headers())
+
+#writing table header:
 csv=open('PR_'+str(datetime.datetime.now())+'.csv','w')
-csv.write(get_headers())
+csv.write('polling_stations,')
+for i in range(1, 23):
+    csv.write('v'+str(i)+',')
+csv.write('total, turnout_perc\n')
 
 #open bugfile:
 bugs=open('Bugs_'+str(datetime.datetime.now())+'.txt', 'w')
