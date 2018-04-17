@@ -5,22 +5,22 @@ import datetime
 
 def get_stations(url):
     try:
-        html=requests.get(url).text.encode('ISO-8859-1').decode('UTF-8')
+        html=requests.get(url, timeout=1).text.encode('ISO-8859-1').decode('UTF-8')
         soup=bs4.BeautifulSoup(html)
         links_raw=soup.findAll('a')
         links=[]
         for link in links_raw:
             links.append(url.rstrip('szkkiv.html')+link['href'])
         return links
-    except (ConnectionError, TimeoutError):
-        print('Connection error. Reconnecting in 10 seconds...')
-        time.sleep(10)
+    except (requests.exceptions.ConnectionError, requests. exceptions.Timeout):
+        print('Connection error. Reconnecting in 5 seconds...')
+        time.sleep(5)
         return get_stations(url)
 
 
 def get_data(url):
     try:
-        html=requests.get(url).text.encode('ISO-8859-1').decode('UTF-8')
+        html=requests.get(url, timeout=1).text.encode('ISO-8859-1').decode('UTF-8')
         turnout=re.findall('<br>\d+\.\d+ %</td>', html)[0]
         turnout=turnout.lstrip('<br>').rstrip(' %</td>')
         start_part=html.find('<th>A pártlista neve</th>')
@@ -33,9 +33,9 @@ def get_data(url):
             datastr=datastr+party_results[i].text+','
         datastr=datastr+party_results[-1].text+','+turnout+'\n'
         return datastr
-    except (ConnectionError, TimeoutError):
-        print('Connection error. Reconnecting in 10 seconds...')
-        time.sleep(10)
+    except (requests.exceptions.ConnectionError, requests. exceptions.Timeout):
+        print('Connection error. Reconnecting in 5 seconds...')
+        time.sleep(5)
         return get_data(url)
 
 def get_headers():
