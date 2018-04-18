@@ -30,7 +30,7 @@ def get_data(url):
         party_results=soup.findAll('td', style="text-align:right;")
         datastr=''
         for i in range(len(party_results)-2):
-            datastr=datastr+party_results[i].text+','
+            datastr=datastr+party_results[i].text.lstrip().rstrip()+','
         datastr=datastr+party_results[-1].text+','+turnout+'\n'
         return datastr
     except (requests.exceptions.ConnectionError, requests. exceptions.Timeout):
@@ -85,7 +85,7 @@ for letter in letters:
         for link in links:
             try:
                 loc_id=re.findall('szkjkv_\d+', link)[0].lstrip('szkjkv')
-                csv.write(location+loc_id+','+get_data(link).lstrip())
+                csv.write(location+loc_id+','+get_data(link))
             except IndexError:
                 bugs.write(link+'\n')
         print(location+' done')
