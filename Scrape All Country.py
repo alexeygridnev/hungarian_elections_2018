@@ -31,7 +31,7 @@ def get_data(url):
         datastr=''
         for i in range(len(party_results)-2):
             datastr=datastr+party_results[i].text.lstrip().rstrip()+','
-        datastr=datastr+party_results[-1].text+','+turnout+'\n'
+        datastr=datastr+party_results[-1].text.lstrip().rstrip()+','+turnout+'\n'
         return datastr
     except (requests.exceptions.ConnectionError, requests. exceptions.Timeout):
         print('Connection error. Reconnecting in 5 seconds...')
