@@ -85,7 +85,7 @@ for letter in letters:
         for link in links:
             try:
                 loc_id=re.findall('szkjkv_\d+', link)[0].lstrip('szkjkv')
-                csv.write(location+loc_id+','+get_data(link))
+                csv.write(location+loc_id+','+get_data(link).lstrip())
             except IndexError:
                 bugs.write(link+'\n')
         print(location+' done')
