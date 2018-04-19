@@ -62,7 +62,7 @@ csv=open('PR_'+str(datetime.datetime.now())+'.csv','w')
 csv.write('polling_stations,')
 for i in range(1, 23):
     csv.write('v'+str(i)+',')
-csv.write('total, turnout_perc\n')
+csv.write('total,turnout_perc\n')
 
 #open bugfile:
 bugs=open('Bugs_'+str(datetime.datetime.now())+'.txt', 'w')
