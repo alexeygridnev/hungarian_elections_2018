@@ -31,7 +31,9 @@ def get_data(url):
         datastr=''
         for i in range(len(party_results)-2):
             datastr=datastr+party_results[i].text.lstrip().rstrip()+','
-        datastr=datastr+party_results[-1].text.lstrip().rstrip()+','+turnout+'\n'
+        total=party_results[-1].text
+        datastr=datastr+total+','+turnout+'\n'
+        datastr=re.sub('\s+', '', datastr)
         return datastr
     except (requests.exceptions.ConnectionError, requests. exceptions.Timeout):
         print('Connection error. Reconnecting in 5 seconds...')
@@ -88,6 +90,7 @@ for letter in letters:
                 csv.write(location+loc_id+','+get_data(link))
             except IndexError:
                 bugs.write(link+'\n')
+                print('Index error occured')
         print(location+' done')
     
 csv.close()
