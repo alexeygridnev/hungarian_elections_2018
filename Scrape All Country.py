@@ -66,9 +66,6 @@ for i in range(1, 23):
     csv.write('v'+str(i)+',')
 csv.write('total,turnout_perc\n')
 
-#open bugfile:
-bugs=open('Bugs_'+str(datetime.datetime.now())+'.txt', 'w')
-
 #getting data, loop:
 
 letters='abcdefghijklmnoprstuvz'
@@ -84,14 +81,11 @@ for letter in letters:
         location=el.text
         url_dist='http://www.valasztas.hu/dyn/pv18/szavossz/hu'+el['href'].lstrip('..')
         links=get_stations(url_dist)
-        for link in links:
-            try:
+        if len(links)==0:
+            csv.write(location+','+get_data(url_dist)+'\n')
+        else:    
+            for link in links:
                 loc_id=re.findall('szkjkv_\d+', link)[0].lstrip('szkjkv')
                 csv.write(location+loc_id+','+get_data(link)+'\n')
-            except IndexError:
-                bugs.write(link+'\n')
-                print('Index error occured')
-        print(location+' done')
-    
+        print(location+' done')    
 csv.close()
-bugs.close()
