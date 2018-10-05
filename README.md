@@ -1,2 +1,2 @@
 # hungarian_elections_2018
-The first results of Hungarian parliamentary elections of 2018 (as of 09 Aplil, 18:30). So far, only results for proportional representation and without foreign and postal votes. The script for scraping is attached. To be updated.
+Scripts for scraping results of Hungarian parliamentary elections of 2018 and 2010 elections. So far, scrapes only results for proportional representation for 2018 elections and for multimember constituencies for 2010 elections. Written for a research which is goind to be presented in UPTAKE Workshop in Tartu on 19 October 2018 (http://www.uptake.ut.ee/cfp-uptake-workshop-democracy-in-reverse-at-tartu-estonia/) To be updated.
